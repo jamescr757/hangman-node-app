@@ -35,11 +35,14 @@ const Word = function(word) {
 
 }
 
+// export Word constructor
+module.exports = Word;
+
 
 
 // ============================================================================================================================================
 // TESTING Word constructor 
-const newWordObj = new Word("equestrian");
+// const newWordObj = new Word("equestrian");
 // expected output is array of letter objects
 // passed test
 // console.log("expect array of letter objects", newWordObj.lettersArray);
