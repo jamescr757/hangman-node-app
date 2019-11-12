@@ -1,5 +1,5 @@
 // Letter constructor file 
-// PASSED TEST 
+// PASSED all tests 
 
 
 // takes in underlying letter
@@ -20,8 +20,13 @@ function Letter(letter) {
     }
 }
 
+// export Letter constructor
+module.exports = Letter;
 
-// testing Letter constructor
+
+
+// ============================================================================================================================================
+// TESTING Letter constructor
 // const newLetter = new Letter("a");
 // console.log("newLetter object", newLetter);
 
