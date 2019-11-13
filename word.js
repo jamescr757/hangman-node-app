@@ -13,15 +13,23 @@ const Word = function(word) {
     this.lettersArray = [];
 
     for (let i = 0; i < word.length; i++) {
-        this.lettersArray.push(new Letter(word[i]));
+        // if the character is not a space
+        if (!(word[i] === " ")) this.lettersArray.push(new Letter(word[i]));
+
+        // else, just push a space
+        else this.lettersArray.push(" ");
     }
     
     // call getLetter function to return underscores/letters depending on user guesses 
     this.displayWord = function() {
-        let displayedWord = " ";
-
+        let displayedWord = " "; 
+        
         for (let i = 0; i < this.lettersArray.length; i++) {
-            displayedWord += `${this.lettersArray[i].getLetter()} `;
+            // if character is not a space
+            if (!(this.lettersArray[i] === " ")) displayedWord += `${this.lettersArray[i].getLetter()} `;
+
+            // else, display spaces for the user
+            else displayedWord += "  "
         }
 
         return displayedWord;
@@ -30,7 +38,14 @@ const Word = function(word) {
     // input a character to check
     // loop through lettersArray and call letterChecker
     this.checkCharacter = function(character) {
-        this.lettersArray.forEach(element => element.letterChecker(character));
+        // this.lettersArray.forEach(element => element.letterChecker(character));
+        for (let i = 0; i < this.lettersArray.length; i++) {
+            // if character is not a space
+            if (!(this.lettersArray[i] === " ")) this.lettersArray[i].letterChecker(character);
+
+            // else, display spaces for the user
+            // else displayedWord += "  "
+        }
     }
 
 }
