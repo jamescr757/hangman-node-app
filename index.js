@@ -6,6 +6,7 @@ const Word = require('./word.js');
 
 // global game object
 // word bank from previous hangman game 
+// TODO: save user guesses in an array
 const game = {
     wordBank: ["baseball", "hockey", "football", "soccer", "basketball", "rowing", "softball", "volleyball", "golf", "swimming", "tennis", "lacrosse", "gymnastics", "badminton","cricket", "kickball", "skateboarding", "surfing", "snowboarding", "skiing", "wakeboarding", "dodgeball", "quidditch", "frisbee", "cycling", "wrestling", "boxing", "karate", "taekwondo", "billiards", "snooker", "foosball", "rugby", "curling", "triathlon", "polo", "diving", "bandy", "bowling", "darts", "handball", "running", "archery", "equestrian", "sailing", "weightlifting", "luge", "skeleton", "bobsleigh", "judo", "fencing"],
     letterBank: ['a', 'o', 'e', 'u', 'i', 'd', 'h', 't', 'n', 's', 'p', 'y', 'f', 'g', 'c', 'r', 'l', 'q', 'j', 'k', 'x', 'b', 'm', 'w', 'v', 'z'],
@@ -49,6 +50,7 @@ const game = {
                 name: "userLetter",
                 message: "Guess a letter:",
                 // TODO: add user input validation to be 1 letter and a letter
+                // TODO: don't let user guess same letter twice
             }
         ]).then(answer => {
             // if incorrect letter, tell user and display guess count
@@ -134,3 +136,6 @@ const game = {
 
 game.playGame();
 
+// TODO: style the console logs with chalk and spaces
+
+// TODO: fill-out, format, and style readme
