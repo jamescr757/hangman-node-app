@@ -57,6 +57,8 @@ const game = {
             {
                 name: "userLetter",
                 message: "Guess a letter:",
+                // tried to use validate but didn't work
+                // created my own validation process in next if/else statement below
             }
         ]).then(answer => {
             // cases to stop the round: input is not a letter, letter already guessed, input is not 1 character
