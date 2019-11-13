@@ -13,7 +13,7 @@ function Letter(letter) {
     this.isGuessed = false;
 
     this.getLetter = function() {
-        if (this.isGuessed) return chalk.green(this.letter);
+        if (this.isGuessed) return chalk.green(this.letter.toUpperCase());
         else return "_";
     }
 

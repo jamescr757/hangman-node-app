@@ -15,6 +15,7 @@ const game = {
     wordObj: {},
     displayedWord: "letters and underscores",
     userGuesses: [],
+    stopThisRound: false,
 
     // passed test
     wordGenerator() {
@@ -28,15 +29,21 @@ const game = {
         else this.numGuesses = this.word.length + 1;
     },
 
-    displayGuessCount() {
+    displayGuess() {
         console.log("");
-        console.log(`Number of guesses remaining: ${chalk.yellow(game.numGuesses)}`);
+        console.log(`Number of guesses remaining: ${chalk.yellow(this.numGuesses)}`);
+        console.log("");
+        console.log(`Letters already guessed: ${chalk.yellow(this.userGuesses.join(', ').toUpperCase())}`);
         console.log("");
     }, 
 
-    endMessage(message) {
+    answerMessage(color, message) {
         console.log("");
-        console.log(chalk.green(message));
+        console.log(chalk[color](message));
+    },
+
+    endMessage(color, message) {
+        this.answerMessage(color, message);
         console.log("");
         console.log(chalk.yellow("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"));
         console.log("");
@@ -50,53 +57,47 @@ const game = {
             {
                 name: "userLetter",
                 message: "Guess a letter:",
-                // TODO: add user input validation to be 1 letter and a letter
             }
         ]).then(answer => {
-            // variable that prevents game from carrying out its processes
-            // not able to use break, so using stopFlow variable
-            let stopFlow = false;
-
-            // if letter has already been gussed, prompt the user again
+            // cases to stop the round: input is not a letter, letter already guessed, input is not 1 character
+            // need seperate if statement because user message will be different
             // else, push guess into userGuess array
-            if (this.userGuesses.includes(answer.userLetter)) {
-                console.log("");
-                console.log("That letter has already been guessed");
-                this.playAnotherRound();
-                // can't use break so need another way to skip the next 
-                // two if statements if the letter has already been guessed
-                stopFlow = true;
+            if (!(answer.userLetter.length === 1) || !this.letterBank.includes(answer.userLetter)) {
+                this.stopRound("yellow", "Please input 1 letter");
+ 
+            } else if (this.userGuesses.includes(answer.userLetter)) {
+                this.stopRound("yellow", "That letter has already been guessed");
+
             } else {
                 this.userGuesses.push(answer.userLetter);
+                this.stopThisRound = false;
             }
             
             // if incorrect letter, tell user and display guess count
             // else, tell user correct and display guess count
             // also run check character method to fill-in underscores
-            if (!this.word.includes(answer.userLetter) && !stopFlow) {
-                console.log("");
-                console.log("Letter " + chalk.red("incorrect"));
+            if (!this.word.includes(answer.userLetter) && !this.stopThisRound) {
+                this.answerMessage("red", "Incorrect!")
                 this.numGuesses--;
-            } else if (!stopFlow) {
+            } else if (!this.stopThisRound) {
                 this.wordObj.checkCharacter(answer.userLetter);
-                console.log("");
-                console.log(chalk.green("Correct!"));
+                this.answerMessage("green", "Correct!");
             }
     
             // word as displayed to user
             this.displayedWord = this.wordObj.displayWord();
     
             // game lost/won or keep playing logic
-            if (this.numGuesses === 0 && !stopFlow) {
-                this.endMessage("GAME OVER")
+            if (this.numGuesses === 0 && !this.stopThisRound) {
+                this.endMessage("red", "GAME OVER")
                 this.playGameAgain();
     
-            } else if (!this.displayedWord.includes("_") && !stopFlow) {
+            } else if (!this.displayedWord.includes("_") && !this.stopThisRound) {
                 // user won the round 
-                this.endMessage("YOU WIN!!");
+                this.endMessage("green", "YOU WIN!!");
                 this.playGameAgain();
     
-            } else if (!stopFlow) {
+            } else if (!this.stopThisRound) {
                 this.playAnotherRound();
             } 
                 
@@ -107,9 +108,15 @@ const game = {
         });
     },
 
+    stopRound(color, message) {
+        this.answerMessage(color, message);
+        this.playAnotherRound();
+        this.stopThisRound = true;
+    },
+
     // displaying number of guesses, user view of word and prompting the user to guess a letter
     playAnotherRound() {
-        this.displayGuessCount();
+        this.displayGuess();
         console.log(this.displayedWord);
         console.log("");
 
@@ -160,6 +167,6 @@ const game = {
 
 game.playGame();
 
-// TODO: style the console logs with chalk and spaces
+// TODO: style the game output and add stick figure
 
 // TODO: fill-out, format, and style readme
