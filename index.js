@@ -6,13 +6,14 @@ const Word = require('./word.js');
 
 // global game object
 // word bank from previous hangman game 
-// TODO: save user guesses in an array
 const game = {
     wordBank: ["baseball", "hockey", "football", "soccer", "basketball", "rowing", "softball", "volleyball", "golf", "swimming", "tennis", "lacrosse", "gymnastics", "badminton","cricket", "kickball", "skateboarding", "surfing", "snowboarding", "skiing", "wakeboarding", "dodgeball", "quidditch", "frisbee", "cycling", "wrestling", "boxing", "karate", "taekwondo", "billiards", "snooker", "foosball", "rugby", "curling", "triathlon", "polo", "diving", "bandy", "bowling", "darts", "handball", "running", "archery", "equestrian", "sailing", "weightlifting", "luge", "skeleton", "bobsleigh", "judo", "fencing"],
     letterBank: ['a', 'o', 'e', 'u', 'i', 'd', 'h', 't', 'n', 's', 'p', 'y', 'f', 'g', 'c', 'r', 'l', 'q', 'j', 'k', 'x', 'b', 'm', 'w', 'v', 'z'],
     numGuesses: 0,
+    userGuesses: [],
     word: "str",
     wordObj: {},
+    displayedWord: "letters and underscores",
     userGuesses: [],
 
     // passed test
@@ -50,42 +51,53 @@ const game = {
                 name: "userLetter",
                 message: "Guess a letter:",
                 // TODO: add user input validation to be 1 letter and a letter
-                
-                // TODO: don't let user guess same letter twice
             }
         ]).then(answer => {
+            // variable that prevents game from carrying out its processes
+            // not able to use break, so using stopFlow variable
+            let stopFlow = false;
+
+            // if letter has already been gussed, prompt the user again
+            // else, push guess into userGuess array
+            if (this.userGuesses.includes(answer.userLetter)) {
+                console.log("");
+                console.log("That letter has already been guessed");
+                this.playAnotherRound();
+                // can't use break so need another way to skip the next 
+                // two if statements if the letter has already been guessed
+                stopFlow = true;
+            } else {
+                this.userGuesses.push(answer.userLetter);
+            }
+            
             // if incorrect letter, tell user and display guess count
             // else, tell user correct and display guess count
             // also run check character method to fill-in underscores
-            if (!this.word.includes(answer.userLetter)) {
+            if (!this.word.includes(answer.userLetter) && !stopFlow) {
                 console.log("");
                 console.log("Letter " + chalk.red("incorrect"));
                 this.numGuesses--;
-            } else {
+            } else if (!stopFlow) {
                 this.wordObj.checkCharacter(answer.userLetter);
                 console.log("");
                 console.log(chalk.green("Correct!"));
             }
     
             // word as displayed to user
-            const displayedWord = this.wordObj.displayWord();
+            this.displayedWord = this.wordObj.displayWord();
     
             // game lost/won or keep playing logic
-            if (this.numGuesses === 0) {
+            if (this.numGuesses === 0 && !stopFlow) {
                 this.endMessage("GAME OVER")
-                playGameAgain();
+                this.playGameAgain();
     
-            } else if (!displayedWord.includes("_")) {
+            } else if (!this.displayedWord.includes("_") && !stopFlow) {
                 // user won the round 
                 this.endMessage("YOU WIN!!");
-                playGameAgain();
+                this.playGameAgain();
     
-            } else {
-                this.displayGuessCount();
-                console.log(displayedWord);
-                console.log("");
-    
-                playRound();
+            } else if (!stopFlow) {
+                this.playAnotherRound();
             } 
                 
         }).catch(error => {
@@ -95,17 +107,28 @@ const game = {
         });
     },
 
+    // displaying number of guesses, user view of word and prompting the user to guess a letter
+    playAnotherRound() {
+        this.displayGuessCount();
+        console.log(this.displayedWord);
+        console.log("");
+
+        this.playRound();
+    },
+
     // passed test
     playGame() {
+        this.userGuesses = [];
         this.wordGenerator();
         this.numGuessGenerator();
 
         this.wordObj = new Word(this.word);
+        this.displayedWord = this.wordObj.displayWord();
 
         console.log("");
         console.log("current word", this.word);
         console.log("");
-        console.log(this.wordObj.displayWord());
+        console.log(this.displayedWord);
         console.log("");
 
         this.playRound();
