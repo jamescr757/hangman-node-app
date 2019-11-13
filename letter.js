@@ -1,6 +1,8 @@
 // Letter constructor file 
 // PASSED all tests 
 
+// import chalk 
+const chalk = require('chalk');
 
 // takes in underlying letter
 // is guessed boolean; default is false 
@@ -11,7 +13,7 @@ function Letter(letter) {
     this.isGuessed = false;
 
     this.getLetter = function() {
-        if (this.isGuessed) return this.letter;
+        if (this.isGuessed) return chalk.green(this.letter);
         else return "_";
     }
 
