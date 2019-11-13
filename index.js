@@ -50,6 +50,7 @@ const game = {
                 name: "userLetter",
                 message: "Guess a letter:",
                 // TODO: add user input validation to be 1 letter and a letter
+                
                 // TODO: don't let user guess same letter twice
             }
         ]).then(answer => {
