@@ -43,6 +43,13 @@ const game = {
     },
 
     endMessage(color, message) {
+        // display correct word - need to flip isGuessed property to true and run displayWord()
+        this.wordObj.flipAllCharacters();
+        this.displayedWord = this.wordObj.displayWord();
+        console.log(""); console.log("");
+        console.log(this.displayedWord);
+        console.log(""); 
+
         this.answerMessage(color, message);
         console.log("");
         console.log(chalk.yellow("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"));

@@ -38,13 +38,19 @@ const Word = function(word) {
     // input a character to check
     // loop through lettersArray and call letterChecker
     this.checkCharacter = function(character) {
-        // this.lettersArray.forEach(element => element.letterChecker(character));
+
         for (let i = 0; i < this.lettersArray.length; i++) {
             // if character is not a space
             if (!(this.lettersArray[i] === " ")) this.lettersArray[i].letterChecker(character);
+        }
+    }
 
-            // else, display spaces for the user
-            // else displayedWord += "  "
+    // flip all characters guessed property to true
+    this.flipAllCharacters = function() {
+
+        for (let i = 0; i < this.lettersArray.length; i++) {
+            // if character is not a space
+            if (!(this.lettersArray[i] === " ")) this.lettersArray[i].isGuessed = true;
         }
     }
 
