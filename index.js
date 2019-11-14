@@ -10,6 +10,8 @@ const game = {
     wordBank: ["baseball", "football", "soccer", "basketball", "rowing", "softball", "volleyball", "golf", "swimming", "tennis", "lacrosse", "gymnastics", "badminton","cricket", "kickball", "skateboarding", "surfing", "snowboarding", "skiing", "wakeboarding", "dodgeball", "quidditch", "cycling", "wrestling", "boxing", "karate", "taekwondo", "billiards", "snooker", "foosball", "rugby", "curling", "triathlon", "diving", "bandy", "bowling", "darts", "handball", "running", "archery", "sailing", "weightlifting", "luge", "skeleton", "bobsleigh", "judo", "fencing", "ice hockey", "horse racing", "track and field", "motorcyle racing", "table tennis", "beach volleyball", "ultimate", "rock climbing", "mixed martial arts", "jousting", "rodeo", "fly fishing", "sport fishing", "disc golf", "miniature golf", "trapeze", "water polo", "figure skating", "speed skating", "four square", "pickleball", "racquetball", "squash", "field hockey", "formula racing", "hunger games", "roller derby", "tetherball", "axe throwing", "logrolling", "wallball", "wood chopping"],
     letterBank: ['a', 'o', 'e', 'u', 'i', 'd', 'h', 't', 'n', 's', 'p', 'y', 'f', 'g', 'c', 'r', 'l', 'q', 'j', 'k', 'x', 'b', 'm', 'w', 'v', 'z'],
     numGuesses: 0,
+    gameCount: 0,
+    winCount: 0,
     userGuesses: [],
     word: "str",
     wordObj: {},
@@ -42,17 +44,27 @@ const game = {
         console.log(chalk[color](message));
     },
 
+    endBorder() {
+        console.log(""); console.log("");
+        console.log(chalk.cyan("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"));
+        console.log(""); 
+    },
+
     endMessage(color, message) {
+        this.gameCount++;
         // display correct word - need to flip isGuessed property to true and run displayWord()
         this.wordObj.flipAllCharacters();
         this.displayedWord = this.wordObj.displayWord();
+
+        this.endBorder();
+        this.answerMessage(color, message);
         console.log(""); console.log("");
         console.log(this.displayedWord);
+        console.log(""); console.log("");
+        console.log("Games Played: " + chalk.green(this.gameCount));
         console.log(""); 
-
-        this.answerMessage(color, message);
-        console.log("");
-        console.log(chalk.yellow("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"));
+        console.log("Number of Wins: " + chalk.green(this.winCount));
+        this.endBorder();
         console.log("");
     },
 
@@ -98,11 +110,12 @@ const game = {
     
             // game lost/won or keep playing logic
             if (this.numGuesses === 0 && !this.stopThisRound) {
-                this.endMessage("red", "GAME OVER")
+                this.endMessage("red", "YOU LOSE!");
                 this.playGameAgain();
     
             } else if (!this.displayedWord.includes("_") && !this.stopThisRound) {
                 // user won the round 
+                this.winCount++;
                 this.endMessage("green", "YOU WIN!!");
                 this.playGameAgain();
     
@@ -175,7 +188,5 @@ const game = {
 }
 
 game.playGame();
-
-// TODO: style the game output and add stick figure
 
 // TODO: fill-out, format, and style readme
