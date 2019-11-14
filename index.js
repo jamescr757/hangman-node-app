@@ -155,7 +155,7 @@ const game = {
         this.displayedWord = this.wordObj.displayWord();
 
         console.log("");
-        console.log("current word", this.word);
+        console.log(chalk.green("Guess the word below!"));
         console.log("");
         console.log(this.displayedWord);
         console.log("");
@@ -189,4 +189,4 @@ const game = {
 
 game.playGame();
 
-// TODO: fill-out, format, and style readme
+
